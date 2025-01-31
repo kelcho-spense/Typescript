@@ -61,6 +61,24 @@ console.log(newGuy.age); // Get the age using the getter method
 
 ```
 
+#### Parameter Properties
+
+Parameter properties allow you to declare and initialize properties in a class without explicitly declaring them.
+
+```typescript
+class Person {
+  constructor(public name: string, private age: number) {}
+
+  get myAge() {
+    return this.age
+  }
+}
+
+const person:Person = new Person("John", 30); // Create a new Person object
+console.log(person.name); // "John"
+console.log(person.myAge) // 30
+```
+
 ### Encapsulation
 
 Encapsulation is the concept of hiding the internal details of an object and exposing only the necessary parts. In TypeScript, this can be achieved using access modifiers like public, private, and protected.
