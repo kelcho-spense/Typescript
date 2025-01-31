@@ -157,6 +157,7 @@ console.log(person.married); // true
 ### Implementing Interfaces
 
 A class can implement an interface by using the `implements` keyword. The class must provide an implementation for all the properties and methods defined in the interface. The gatch here is that the class must have the same properties and methods as the interface. ie 
+
 - the class must have the same properties and methods as the interface.
 - the class must have the same access modifiers as the interface.
 
@@ -218,6 +219,62 @@ console.log(employee.name); // "John"
 console.log(employee.age); // 30
 console.log(employee.married); // true
 employee.nowMeet(); // "Hello, my name is John and I am 30 years old , I'm am married."
+```
+
+#### Generics
+
+Generics allow you to create reusable components that can work with a variety of data types rather than a single data type. They are used to create classes, interfaces, and functions that can work with any data type.
+
+```typescript 
+class Box<T> {
+  private value: T;
+
+  constructor(value: T) {
+    this.value = value;
+  }
+
+  getValue(): T {
+    return this.value;
+  }
+}
+
+const box1: Box<number> = new Box<number>(10);
+console.log(box1.getValue()); // 10
+
+const box2: Box<string> = new Box<string>("Hello");
+console.log(box2.getValue()); // "Hello"
+```
+
+#### Mixins
+
+Mixins are a way to combine multiple classes into a single class. They are used to add functionality to a class without using inheritance.
+
+```typescript 
+class Person {
+  constructor(public name: string) {}
+}
+
+class Employee {
+  constructor(public position: string) {}
+}
+// Mixin to combine Person and Employee classes
+type Constructor<T = {}> = new (...args: any[]) => T;
+
+function withEmployee<TBase extends Constructor>(Base: TBase) {
+  return class extends Base {
+    position: string;
+
+    constructor(...args: any[]) {
+      super(...args);
+      this.position = "Developer";
+    }
+  };
+}
+
+const EmployeePerson = withEmployee(Person);
+const employeePerson = new EmployeePerson("John");
+console.log(employeePerson.name); // "John"
+console.log(employeePerson.position); // "Developer"
 ```
 
 ## OOP Principles
@@ -335,6 +392,7 @@ cat.makeSound(); // "Meow"
 Abstraction is the concept of hiding the complex implementation details and showing only the necessary parts. In TypeScript, abstraction can be achieved using abstract classes and methods.
 
 Using a banking system as an example
+
 - Defines an `abstract class` Bank with two abstract methods
 - `Abstract methods` must be implemented by any class that extends this class
 
