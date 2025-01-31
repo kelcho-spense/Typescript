@@ -1,6 +1,6 @@
 # Typescript
 
-## OOP
+## OOP Concepts in TypeScript
 
 ### Classes
 
@@ -73,11 +73,154 @@ class Person {
     return this.age
   }
 }
+```
+
+#### Public Static Methods
+
+Public Static methods are methods that belong to the class itself and not to the objects created from the class. They can be called without creating an instance of the class.
+
+```typescript
+class MathUtils {
+  static add(a: number, b: number): number {
+    return a + b;
+  }
+}
+
+console.log(MathUtils.add(2, 3)); // 5
+```
+
+##### Private Static Methods
+
+Private static methods are static methods that are only accessible within the class.
+
+```typescript
+class MathUtils {
+  private static add(a: number, b: number): number {
+    return a + b;
+  }
+
+  static addNumbers(a: number, b: number): number {
+    return MathUtils.add(a, b);
+  }
+}
+
+console.log(MathUtils.addNumbers(2, 3)); // 5
+
 
 const person:Person = new Person("John", 30); // Create a new Person object
 console.log(person.name); // "John"
 console.log(person.myAge) // 30
 ```
+
+### Abstract Classes
+
+Abstract classes are classes that cannot be instantiated directly. They are used as base classes for other classes to inherit from.
+
+```typescript
+abstract class Animal {
+  abstract makeSound(): void;
+}
+
+class Dog extends Animal {
+  makeSound(): void {
+    console.log("Woof");
+  }
+}
+
+const dog: Dog = new Dog();
+dog.makeSound(); // "Woof"
+
+```
+
+### Interfaces
+
+Interfaces are used to define the structure of an object. They can be used to define properties, methods, and index signatures that an object must have.
+
+```typescript
+interface Person {
+  name: string;
+  age: number;
+  married: boolean;
+}
+
+const person: Person = {
+  name: "John",
+  age: 30,
+  married: true
+};
+
+console.log(person.name); // "John"
+console.log(person.age); // 30
+console.log(person.married); // true
+```
+
+### Implementing Interfaces
+
+A class can implement an interface by using the `implements` keyword. The class must provide an implementation for all the properties and methods defined in the interface. The gatch here is that the class must have the same properties and methods as the interface. ie 
+- the class must have the same properties and methods as the interface.
+- the class must have the same access modifiers as the interface.
+
+#### Public Implementing Interfaces
+
+```typescript
+interface Person {
+  name: string;
+  age: number;
+  married: boolean;
+}
+
+class Employee implements Person {
+  constructor(public name: string, public age: number, public married: boolean) {}
+
+  public nowMe(): void {
+    console.log(`Hello, my name is ${this.name} and I am ${this.age} years old , I'm am ${ this.married ? "married" : "not married"}.`);
+  }
+}
+
+const employee: Employee = new Employee("John", 30, true);
+console.log(employee.name); // "John"
+console.log(employee.age); // 30
+console.log(employee.married); // true
+employee.nowMe(); // "Hello, my name is John and I am 30 years old , I'm am married."
+```
+
+#### Private Implementing Interfaces
+
+```typescript
+interface Person {
+  name: string;
+  age: number;
+  married: boolean;
+}
+
+class Employee implements Person {
+  constructor(private _name: string, private _age: number, private _married: boolean) {}
+
+  get name(): string {
+    return this._name;
+  }
+
+  get age(): number {
+    return this._age;
+  }
+
+  get married(): boolean {
+    return this._married;
+  }
+
+  public nowMeet(): void {
+    console.log(`Hello, my name is ${this._name} and I am ${this._age} years old , I'm am ${ this._married ? "married" : "not married"}.`);
+  }
+}
+
+const employee: Employee = new Employee("John", 30, true);
+console.log(employee.name); // "John"
+console.log(employee.age); // 30
+console.log(employee.married); // true
+employee.nowMeet(); // "Hello, my name is John and I am 30 years old , I'm am married."
+```
+
+## OOP Principles
 
 ### Encapsulation
 
@@ -155,4 +298,85 @@ class Employee extends human {
 const employee:Employee = new Employee("John", 30,true, "Developer");
 employee.greet(); // "Hello, my name is John, I'm am 30 years old and I am married."
 employee.work(); // "John of age 30 who is married is working as a Developer."
+```
+
+### Polymorphism
+
+Polymorphism is the ability of an object to take on many forms. In TypeScript, polymorphism can be achieved through method overriding.
+
+```typescript
+class Animal {
+  makeSound(): void {
+    console.log("Some sound");
+  }
+}
+
+class Dog extends Animal {
+  makeSound(): void {
+    console.log("Woof");
+  }
+}
+
+class Cat extends Animal {
+  makeSound(): void {
+    console.log("Meow");
+  }
+}
+
+const dog: Dog = new Dog();
+const cat: Cat = new Cat();
+
+dog.makeSound(); // "Woof"
+cat.makeSound(); // "Meow"
+```
+
+### Abstraction
+
+Abstraction is the concept of hiding the complex implementation details and showing only the necessary parts. In TypeScript, abstraction can be achieved using abstract classes and methods.
+
+Using a banking system as an example
+- Defines an `abstract class` Bank with two abstract methods
+- `Abstract methods` must be implemented by any class that extends this class
+
+```typescript
+abstract class Bank {
+  abstract deposit(amount: number): void;
+  abstract withdraw(amount: number): void;
+}
+```
+
+Create a class `SavingsAccount` that extends the Bank class and implements the `deposit` and `withdraw` methods. Includes balance validation logic for withdrawals.
+
+```typescript 
+
+class SavingsAccount extends Bank {
+  private balance: number = 0;
+
+  deposit(amount: number): void {
+    this.balance += amount;
+    console.log(`Deposited ${amount}. Balance is now ${this.balance}.`);
+  }
+
+  withdraw(amount: number): void {
+    if (this.balance < amount) {
+      console.log("Insufficient balance.");
+      return;
+    }
+    this.balance -= amount;
+    console.log(`Withdrawn ${amount}. Balance is now ${this.balance}.`);
+  }
+}
+```
+
+- Demonstrates how to use the SavingsAccount class
+- Shows the abstraction principle in action - users only interact with the public methods
+- Hides the internal balance property
+
+This example shows how `abstraction` hides the `internal balance property` while exposing only the necessary
+
+```TypeScript
+const savingsAccount: SavingsAccount = new SavingsAccount();
+savingsAccount.deposit(1000); // "Deposited 1000. Balance is now 1000."
+savingsAccount.withdraw(500); // "Withdrawn 500. Balance is now 500."
+savingsAccount.withdraw(600); // "Insufficient balance."
 ```
